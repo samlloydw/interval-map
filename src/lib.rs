@@ -1,1 +1,1 @@
-mod interval_map;
+pub mod interval_map;

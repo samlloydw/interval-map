@@ -5,8 +5,8 @@ use std::hash::Hash;
 
 mod test;
 
-/// A hashmap that returns values from ranges (or intervals) of 
-/// keys. The hashmap is initialised with a default value. One can add
+/// A hashmap that returns values from ranges (or intervals).
+/// The hashmap is initialised with a default value. One can add
 /// or remove key-value pairs. Consecutive keys return different values.
 pub struct IntervalMap<K, V>
 where
@@ -110,20 +110,13 @@ where
         self.value_map.keys().filter(|&k| k > key).min()
     }
 
-    /// For any given key, return the next key. Returns None
-    /// if there is no next key. If key is in hashmap, returns
-    /// key.
-    fn next_key_inclusive(&self, key: &K) -> Option<&K> {
-        self.value_map.keys().filter(|&k| k >= key).min()
-    }
-
-    /// For any given key, get the previous key. Returns None 
+    /// For any given key, get the previous key in IntervalMap. Returns None 
     /// if there is no previous key.
     fn previous_key(&self, key: &K) -> Option<&K> {
         self.value_map.keys().filter(|&k| k < key).max()
     }
 
-    /// For any given key, return the next value.
+    /// For any given key, return the next key in IntervalMap's value.
     fn next_value(&self, key: &K) -> &V {
         match self.next_key(key) {
             Some(k) => { &self.value_map.get(&k).unwrap() },
@@ -131,15 +124,7 @@ where
         }
     }
 
-    /// For any given key, return the next value.
-    fn next_value_inclusive(&self, key: &K) -> &V {
-        match self.next_key_inclusive(key) {
-            Some(k) => { &self.value_map.get(&k).unwrap() },
-            None => { &self.default_value },
-        }
-    }
-
-    /// For any given key, return the previous value.
+    /// For any given key, return the previous key in IntervalMap's value.
     fn previous_value(&self, key: &K) -> &V {
         match self.previous_key(key) {
             Some(k) => { self.value_map.get(&k).unwrap() },
